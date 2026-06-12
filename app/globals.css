@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@utility bg-gradient-brand-teal {
+  background: linear-gradient(135deg, #2A8C9E 0%, #3AA6B5 100%);
+}
+
+@utility bg-gradient-brand-gold {
+  background: linear-gradient(135deg, #E8B84B 0%, #F0C674 100%);
+}
+
+@utility text-navy-brand {
+  color: #1B3A5C;
+}
+
+@utility bg-navy-brand {
+  background-color: #1B3A5C;
+}
+
+@utility glow-teal-brand {
+  &:hover {
+    box-shadow: 0 0 20px rgba(42, 140, 158, 0.4);
+  }
+}
+
+/* Custom dark scrollbar and dark base elements */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #050d18;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e2e44;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3AA6B5;
+}
+
+
