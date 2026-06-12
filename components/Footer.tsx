@@ -51,7 +51,7 @@ export default function Footer() {
                 { icon: <Linkedin className="w-4 h-4" />, href: 'https://linkedin.com', label: 'LinkedIn' },
                 { icon: <Github className="w-4 h-4" />, href: 'https://github.com', label: 'GitHub' },
                 { icon: <Twitter className="w-4 h-4" />, href: 'https://twitter.com', label: 'Twitter' },
-                { icon: <Facebook className="w-4 h-4" />, href: 'https://facebook.com', label: 'Facebook' },
+                { icon: <Facebook className="w-4 h-4" />, href: 'https://www.facebook.com/share/18vQKwqA6c/', label: 'Facebook' },
               ].map((social, index) => (
                 <a
                   key={index}
@@ -127,17 +127,17 @@ export default function Footer() {
             </h3>
             
             <ul className="space-y-3 text-sm text-gray-400" id="footer-contact-details">
-              <li className="flex items-start space-x-2.5">
+               <li className="flex items-start space-x-2.5">
                 <MapPin className="w-5 h-5 text-[#3AA6B5] shrink-0 mt-0.5" />
-                <span>Level 28, Menara Binjai, No 2 Jalan Binjai, 50450 Kuala Lumpur, Malaysia</span>
+                <span>40/D, Dilu Road, New Eskaton, Dhaka</span>
               </li>
               <li className="flex items-center space-x-2.5">
                 <Phone className="w-4 h-4 text-[#3AA6B5] shrink-0" />
-                <a href="tel:+60321811888" className="hover:text-white transition-colors">+60 3-2181 1888</a>
+                <a href="tel:01670555719" className="hover:text-white transition-colors">01670555719</a>
               </li>
               <li className="flex items-center space-x-2.5">
                 <Mail className="w-4 h-4 text-[#3AA6B5] shrink-0" />
-                <a href="mailto:info@hasanahtech.com" className="hover:text-white transition-colors">info@hasanahtech.com</a>
+                <a href="mailto:musabbinsharf321@gmail.com" className="hover:text-white transition-colors">musabbinsharf321@gmail.com</a>
               </li>
             </ul>
 

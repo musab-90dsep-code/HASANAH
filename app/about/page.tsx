@@ -43,18 +43,18 @@ const detailedReasons = [
 // Team members profile grid
 const team = [
   {
-    photo: "https://picsum.photos/seed/director/400/400",
+    photo: "/images/image.png",
     name: "Musab bin Sharif",
-    role: "Founder & Chief Architect",
-    bio: "Ex-Silicon Valley Software Architect. Deeply passionate about scaling local commerce with cloud architectures.",
+    role: "Founder, Next.js & Django Developer",
+    bio: "Founder and Software Engineer of Hasanah Tech Solutions, specializing in Next.js & Django development. Passionate about helping businesses streamline operations, increase productivity, and accelerate growth with modern technology.",
     github: "https://github.com",
     linkedin: "https://linkedin.com"
   },
   {
-    photo: "https://picsum.photos/seed/cto/400/400",
-    name: "Zulkifli Rahim",
-    role: "VP of Software Engineering",
-    bio: "12+ years deploying enterprise-scale ERP modules and transactional banking protocols across Southeast Asia.",
+    photo: "/images/obaidullah.png",
+    name: "Obaidullah",
+    role: "MERN Stack Developer",
+    bio: "MERN Stack Developer at Hasanah Tech Solutions, specializing in React, Node.js, Express, and MongoDB to build high-performance web systems and dynamic user interfaces.",
     github: "https://github.com",
     linkedin: "https://linkedin.com"
   },

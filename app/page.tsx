@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   ArrowRight, Cpu, Smartphone, Globe, Cloud, Layout, Briefcase, 
-  Award, ShieldCheck, CheckCircle2, Star, Sparkles, Clock, Headset, Zap 
+  Award, ShieldCheck, CheckCircle2, Star, Sparkles, Clock, Headset, Zap,
+  Linkedin, Github
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import CTABanner from '@/components/CTABanner';
+import StatCounter from '@/components/StatCounter';
 import { useLanguage } from '@/context/LanguageContext';
 
 // Services list
@@ -108,8 +110,45 @@ const logosRef = [
   "Next.js", "React", "Firebase", "PostgreSQL", "Google Cloud", "Django", "Tailwind CSS", "TypeScript"
 ];
 
+// Team members profile grid
+const team = [
+  {
+    photo: "/images/image.png",
+    name: "Musab bin Sharif",
+    role: "Founder, Next.js & Django Developer",
+    bio: "Founder and Software Engineer of Hasanah Tech Solutions, specializing in Next.js & Django development. Passionate about helping businesses streamline operations, increase productivity, and accelerate growth with modern technology.",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com"
+  },
+  {
+    photo: "/images/obaidullah.png",
+    name: "Obaidullah",
+    role: "MERN Stack Developer",
+    bio: "MERN Stack Developer at Hasanah Tech Solutions, specializing in React, Node.js, Express, and MongoDB to build high-performance web systems and dynamic user interfaces.",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com"
+  },
+  {
+    photo: "https://picsum.photos/seed/designer/400/400",
+    name: "Fatimah Hasan",
+    role: "Head of Product & UI/UX",
+    bio: "Aesthetic virtuoso focusing on frictionless checkout experiences, micro-interactions, and premium brand pairings.",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com"
+  },
+  {
+    photo: "https://picsum.photos/seed/ai_lead/400/400",
+    name: "Adrian Tan",
+    role: "Director of Intelligent Automation",
+    bio: "Specialist in machine learning pipelining, bespoke vector embeddings, and generative system controls.",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com"
+  }
+];
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [hoveredMember, setHoveredMember] = useState<number | null>(null);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -133,7 +172,7 @@ export default function Home() {
             className="w-full h-full object-cover opacity-85"
             poster="https://picsum.photos/seed/workspace/1920/1080?blur=10"
           >
-            <source src="/videos/hero-bg.mp4" type="video/mp4" />
+            <source src="/videos/vedio.mp4" />
           </video>
           {/* Overlay to darken video for strong readability of white headings */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#1B3A5C]/90 via-[#1B3A5C]/70 to-transparent" />
@@ -141,7 +180,7 @@ export default function Home() {
 
         {/* Hero content container */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-16">
-          <div className="max-w-3xl space-y-6">
+          <div className="max-w-4xl mx-auto text-center flex flex-col items-center justify-center space-y-6">
             {/* Animated Badge */}
             {mounted && (
               <motion.div
@@ -162,9 +201,9 @@ export default function Home() {
                 transition={{ duration: 0.8, delay: 0.1 }}
                 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]"
               >
-                Driven by Innovation,<br />
+                Website, ERP &<br />
                 <span className="bg-gradient-to-r from-[#3AA6B5] via-[#2A8C9E] to-[#F0C674] bg-clip-text text-transparent font-black">
-                  Empowered by People
+                  Custom Software Development Company
                 </span>
               </motion.h1>
             )}
@@ -174,9 +213,9 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-base sm:text-lg md:text-xl text-gray-200 leading-relaxed max-w-2xl font-normal"
+                className="text-base sm:text-lg md:text-xl text-gray-200 leading-relaxed max-w-2xl mx-auto font-normal"
               >
-                Hasanah Tech Solutions engineers premium custom software, mission-critical mobile apps, and artificial intelligence models constructed from the ground up for massive enterprise scaling.
+                Helping businesses streamline operations, increase productivity, and accelerate growth with modern technology.
               </motion.p>
             )}
 
@@ -185,23 +224,23 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2"
+                className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2"
               >
                 <Link
                   href="/contact"
                   id="hero-primary-btn"
                   className="inline-flex items-center justify-center space-x-2 px-8 py-4 rounded-full font-display text-base font-bold text-white bg-gradient-to-r from-[#2A8C9E] to-[#3AA6B5] hover:from-[#E8B84B] hover:to-[#F0C674] transition-all duration-300 transform hover:scale-105 shadow-xl shadow-[#2A8C9E]/10 hover:shadow-[#E8B84B]/20"
                 >
-                  <span>Build Your Solution</span>
+                  <span>Get Free Consultation</span>
                   <ArrowRight className="w-4 h-4 shrink-0" />
                 </Link>
 
                 <Link
-                  href="/services"
+                  href="/portfolio"
                   id="hero-secondary-btn"
                   className="inline-flex items-center justify-center px-8 py-4 rounded-full font-display text-base font-bold text-white border border-white/20 bg-white/5 hover:bg-white/10 transition-colors"
                 >
-                  Explore Services
+                  View Our Portfolio
                 </Link>
               </motion.div>
             )}
@@ -235,7 +274,7 @@ export default function Home() {
             <div className="lg:col-span-5 relative">
               <div className="relative rounded-2xl overflow-hidden aspect-[4/3] group shadow-2xl">
                 <img
-                  src="https://picsum.photos/seed/workmanship/800/600"
+                  src="/images/about.png"
                   alt="Senior development team in modern workspace"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-all duration-700"
@@ -294,6 +333,87 @@ export default function Home() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2.5. OUR TEAM */}
+      <section className="py-24 bg-[#050D18] border-t border-white/5" id="our-team">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-3 max-w-2xl mx-auto mb-16">
+            <p className="text-sm font-bold uppercase tracking-widest text-[#2A8C9E]">The Innovation Brains</p>
+            <h2 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+              Meet Our Senior Architects
+            </h2>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              A high-precision team uniting localized business values with world-class engineering discipline to build systems that scale indefinitely.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {team.map((member, index) => (
+              <div
+                key={index}
+                className="bg-[#111f32]/60 hover:bg-[#111f32] rounded-2xl overflow-hidden border border-white/5 shadow-2xl transition-all duration-500 group flex flex-col"
+                onMouseEnter={() => setHoveredMember(index)}
+                onMouseLeave={() => setHoveredMember(null)}
+              >
+                {/* Photo with hover reveal banner overlay */}
+                <div className="relative aspect-square overflow-hidden bg-slate-950">
+                  <img
+                    src={member.photo}
+                    alt={member.name}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-all duration-500"
+                  />
+                  
+                  {/* Hover action elements overlay */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t from-[#050D18]/95 via-[#050D18]/60 to-transparent flex flex-col justify-end p-6 transition-opacity duration-300 ${
+                      hoveredMember === index ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    <div className="flex space-x-2">
+                      <a
+                        href={member.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#3AA6B5] flex items-center justify-center text-white transition-colors"
+                      >
+                        <Github className="w-4 h-4" />
+                      </a>
+                      <a
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#3AA6B5] flex items-center justify-center text-white transition-colors"
+                      >
+                        <Linkedin className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content info card */}
+                <div className="p-6 space-y-2 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-display font-extrabold text-slate-200 text-base group-hover:text-[#3AA6B5] transition-colors leading-snug">
+                      {member.name}
+                    </h3>
+                    <p className="text-xs font-bold text-[#2A8C9E] uppercase tracking-wide mb-3">
+                      {member.role}
+                    </p>
+                    <p className="text-xs text-slate-400 leading-relaxed line-clamp-3">
+                      {member.bio}
+                    </p>
+                  </div>
+                  
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#3AA6B5] mt-4 block">
+                    Verified Consultant
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -363,7 +483,7 @@ export default function Home() {
             {stats.map((stat, idx) => (
               <div key={idx} className="space-y-2">
                 <p className="font-display text-4xl sm:text-5xl lg:text-6xl font-black bg-gradient-to-r from-[#3AA6B5] via-[#2A8C9E] to-[#F0C674] bg-clip-text text-transparent">
-                  {stat.value}
+                  <StatCounter value={stat.value} />
                 </p>
                 <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-300">{stat.label}</p>
               </div>
@@ -560,20 +680,37 @@ export default function Home() {
       </section>
 
       {/* 8. PARTNERS/TECH STACK STRIP */}
-      <section id="tech-strip" className="py-12 bg-[#0b1523] border-y border-white/5">
+      <section id="tech-strip" className="py-12 bg-[#0b1523] border-y border-white/5 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#2A8C9E]/50 mb-6 font-mono">
+          <p className="text-center text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#2A8C9E]/50 mb-8 font-mono">
             Trusted with Complex Ecosystem Integration
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-16">
-            {logosRef.map((logo, idx) => (
-              <span
-                key={idx}
-                className="font-display font-semibold text-sm sm:text-base text-slate-500 hover:text-[#3AA6B5] hover:scale-105 cursor-default select-none duration-300 transition-all uppercase tracking-wider"
-              >
-                {logo}
-              </span>
-            ))}
+          
+          <div className="relative w-full overflow-hidden">
+            {/* Fade overlays for smooth scrolling edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-r from-[#0b1523] to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-l from-[#0b1523] to-transparent z-10 pointer-events-none" />
+            
+            <div className="flex animate-marquee gap-12 sm:gap-16 whitespace-nowrap hover:[animation-play-state:paused]">
+              {/* First loop */}
+              {logosRef.map((logo, idx) => (
+                <span
+                  key={`logo-1-${idx}`}
+                  className="font-display font-semibold text-sm sm:text-base text-slate-500 hover:text-[#3AA6B5] hover:scale-105 cursor-default select-none duration-300 transition-all uppercase tracking-wider inline-block"
+                >
+                  {logo}
+                </span>
+              ))}
+              {/* Duplicate loop for seamless infinite scroll */}
+              {logosRef.map((logo, idx) => (
+                <span
+                  key={`logo-2-${idx}`}
+                  className="font-display font-semibold text-sm sm:text-base text-slate-500 hover:text-[#3AA6B5] hover:scale-105 cursor-default select-none duration-300 transition-all uppercase tracking-wider inline-block"
+                >
+                  {logo}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>

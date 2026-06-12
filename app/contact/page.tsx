@@ -24,24 +24,48 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitSuccess(false);
     
-    // Simulate API connection
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: "d5e0b4d9-a86a-40e6-9183-6d464e57c6fb",
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: `New Lead: ${formData.subject} from ${formData.name}`,
+          message: formData.message
+        })
       });
-      // Clear alert after 6 seconds
-      setTimeout(() => setSubmitSuccess(false), 6000);
-    }, 1500);
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitSuccess(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        alert("Submission failed: " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please check your internet connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -58,128 +82,141 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            {/* Split Left - Stateful Contact Form */}
-            <div className="lg:col-span-7 bg-[#0b1523] rounded-3xl p-8 sm:p-10 border border-white/5 shadow-2xl space-y-6">
-              <div className="space-y-2">
-                <h2 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-white animate-fade-in-up">
-                  Submit Your Project Brief
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
-                  Provide your general requirements now. A senior software consultant will respond within 12 standard business hours with an initial estimation scope.
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-5" id="consultation-contact-request-form">
-                
-                {/* Name & Email Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-1.5">
-                    <label htmlFor="name-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Your Full Name</label>
-                    <input
-                      id="name-input"
-                      type="text"
-                      required
-                      name="name"
-                      placeholder="e.g. Mohd Daniel"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E]"
-                    />
+            {/* Split Left - Stateful Contact Form or Success Screen */}
+            <div className="lg:col-span-7">
+              {submitSuccess ? (
+                <div className="bg-[#0b1523] rounded-3xl p-8 sm:p-10 border border-[#2A8C9E]/30 shadow-2xl flex flex-col items-center justify-center text-center space-y-6 py-20 min-h-[500px] animate-fade-in">
+                  <div className="w-20 h-20 rounded-full bg-[#2A8C9E]/20 border border-[#2A8C9E]/40 flex items-center justify-center text-[#3AA6B5] animate-bounce">
+                    <CheckCircle className="w-12 h-12" />
                   </div>
-                  
-                  <div className="space-y-1.5">
-                    <label htmlFor="email-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Work Email Address</label>
-                    <input
-                      id="email-input"
-                      type="email"
-                      required
-                      name="email"
-                      placeholder="e.g. daniel@company.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E]"
-                    />
+                  <div className="space-y-2">
+                    <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-white">
+                      Message Sent Successfully!
+                    </h2>
+                    <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                      Thank you for contacting us. We have received your technical brief and a senior software architect will follow up within 12 business hours.
+                    </p>
                   </div>
+                  <button
+                    onClick={() => setSubmitSuccess(false)}
+                    className="px-8 py-3.5 rounded-full font-display text-sm font-bold text-white bg-gradient-to-r from-[#2A8C9E] to-[#3AA6B5] hover:from-[#E8B84B] hover:to-[#F0C674] hover:text-[#1B3A5C] transition-all duration-300 transform hover:scale-105"
+                  >
+                    Send Another Message
+                  </button>
                 </div>
-
-                {/* Phone & Subject Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-1.5">
-                    <label htmlFor="phone-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Phone Number (Optional)</label>
-                    <input
-                      id="phone-input"
-                      type="tel"
-                      name="phone"
-                      placeholder="e.g. +60123456789"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E]"
-                    />
+              ) : (
+                <div className="bg-[#0b1523] rounded-3xl p-8 sm:p-10 border border-white/5 shadow-2xl space-y-6 animate-fade-in">
+                  <div className="space-y-2">
+                    <h2 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-white animate-fade-in-up">
+                      Submit Your Project Brief
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
+                      Provide your general requirements now. A senior software consultant will respond within 12 standard business hours with an initial estimation scope.
+                    </p>
                   </div>
-                  
-                  <div className="space-y-1.5">
-                    <label htmlFor="subject-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Interested Service</label>
-                    <div className="relative">
-                      <select
-                        id="subject-input"
-                        required
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-300 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E] appearance-none"
-                      >
-                        <option value="" className="bg-[#0b1523] text-slate-400">-- Select Service --</option>
-                        <option value="Web Developmenet" className="bg-[#0b1523] text-white">Web Application Architecture</option>
-                        <option value="Mobile App Development" className="bg-[#0b1523] text-white">Mobile App Development</option>
-                        <option value="AI Integration & Agents" className="bg-[#0b1523] text-white">AI Integration & Custom Agents</option>
-                        <option value="Ops Custom ERP" className="bg-[#0b1523] text-white">Operations / Custom ERP Platform</option>
-                        <option value="Figma UIUX" className="bg-[#0b1523] text-white">UI/UX Design Wireframing</option>
-                        <option value="General Consultation" className="bg-[#0b1523] text-white">Other Software Technical Support</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#2A8C9E]">
-                        <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+
+                  <form onSubmit={handleSubmit} className="space-y-5" id="consultation-contact-request-form">
+                    
+                    {/* Name & Email Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-1.5">
+                        <label htmlFor="name-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Your Full Name</label>
+                        <input
+                          id="name-input"
+                          type="text"
+                          required
+                          name="name"
+                          placeholder="e.g. Mohd Daniel"
+                          value={formData.name}
+                          onChange={handleChange}
+                          className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E]"
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label htmlFor="email-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Work Email Address</label>
+                        <input
+                          id="email-input"
+                          type="email"
+                          required
+                          name="email"
+                          placeholder="e.g. daniel@company.com"
+                          value={formData.email}
+                          onChange={handleChange}
+                          className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E]"
+                        />
                       </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* Message input */}
-                <div className="space-y-1.5">
-                  <label htmlFor="message-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Project Brief & Goals</label>
-                  <textarea
-                    id="message-input"
-                    required
-                    rows={4}
-                    name="message"
-                    placeholder="Tell us about your operations, tech stack, data size, and general budget outline..."
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E] resize-none"
-                  />
-                </div>
-
-                {/* Success alert message container */}
-                {submitSuccess && (
-                  <div className="bg-[#2A8C9E]/10 border border-[#2A8C9E]/20 text-white p-4 rounded-xl flex items-center space-x-3 text-sm animate-fade-in" id="form-success-info">
-                    <CheckCircle className="w-5 h-5 text-[#3AA6B5] shrink-0" />
-                    <div>
-                      <p className="font-bold text-[#2A8C9E]">Brief Submitted Successfully!</p>
-                      <p className="text-xs text-slate-400 mt-0.5">We have locked your inquiry. A senior solution architect will follow up very shortly.</p>
+                    {/* Phone & Subject Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-1.5">
+                        <label htmlFor="phone-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Phone Number (Optional)</label>
+                        <input
+                          id="phone-input"
+                          type="tel"
+                          name="phone"
+                          placeholder="e.g. +60123456789"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E]"
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label htmlFor="subject-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Interested Service</label>
+                        <div className="relative">
+                          <select
+                            id="subject-input"
+                            required
+                            name="subject"
+                            value={formData.subject}
+                            onChange={handleChange}
+                            className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-300 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E] appearance-none"
+                          >
+                            <option value="" className="bg-[#0b1523] text-slate-400">-- Select Service --</option>
+                            <option value="Web Developmenet" className="bg-[#0b1523] text-white">Web Application Architecture</option>
+                            <option value="Mobile App Development" className="bg-[#0b1523] text-white">Mobile App Development</option>
+                            <option value="AI Integration & Agents" className="bg-[#0b1523] text-white">AI Integration & Custom Agents</option>
+                            <option value="Ops Custom ERP" className="bg-[#0b1523] text-white">Operations / Custom ERP Platform</option>
+                            <option value="Figma UIUX" className="bg-[#0b1523] text-white">UI/UX Design Wireframing</option>
+                            <option value="General Consultation" className="bg-[#0b1523] text-white">Other Software Technical Support</option>
+                          </select>
+                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#2A8C9E]">
+                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                )}
 
-                {/* Submit button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  id="contact-form-submit-btn"
-                  className="w-full inline-flex items-center justify-center space-x-2 px-6 py-4 rounded-xl font-display text-base font-bold text-white bg-gradient-to-r from-[#2A8C9E] to-[#3AA6B5] hover:from-[#E8B84B] hover:to-[#F0C674] hover:text-[#1B3A5C] transition-all duration-300 transform hover:scale-101 disabled:opacity-50 pointer-events-auto"
-                >
-                  <Send className="w-4 h-4 shrink-0" />
-                  <span>{isSubmitting ? 'Submitting Brief...' : 'Send Technical Brief'}</span>
-                </button>
-              </form>
+                    {/* Message input */}
+                    <div className="space-y-1.5">
+                      <label htmlFor="message-input" className="text-xs font-bold uppercase text-[#2A8C9E] tracking-wide">Project Brief & Goals</label>
+                      <textarea
+                        id="message-input"
+                        required
+                        rows={4}
+                        name="message"
+                        placeholder="Tell us about your operations, tech stack, data size, and general budget outline..."
+                        value={formData.message}
+                        onChange={handleChange}
+                        className="w-full bg-[#111f32]/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2A8C9E] focus:ring-1 focus:ring-[#2A8C9E] resize-none"
+                      />
+                    </div>
+
+                    {/* Submit button */}
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      id="contact-form-submit-btn"
+                      className="w-full inline-flex items-center justify-center space-x-2 px-6 py-4 rounded-xl font-display text-base font-bold text-white bg-gradient-to-r from-[#2A8C9E] to-[#3AA6B5] hover:from-[#E8B84B] hover:to-[#F0C674] hover:text-[#1B3A5C] transition-all duration-300 transform hover:scale-101 disabled:opacity-50 pointer-events-auto"
+                    >
+                      <Send className="w-4 h-4 shrink-0" />
+                      <span>{isSubmitting ? 'Submitting Brief...' : 'Send Technical Brief'}</span>
+                    </button>
+                  </form>
+                </div>
+              )}
             </div>
 
             {/* Split Right - Office info cards + Visual Map Mock */}
@@ -196,7 +233,7 @@ export default function Contact() {
                     <MapPin className="w-5 h-5 text-[#2A8C9E] shrink-0 mt-0.5" />
                     <div>
                       <p className="font-bold text-slate-100">Corporate Headquarters</p>
-                      <p className="text-xs text-slate-400 mt-1">Level 28, Menara Binjai, No 2 Jalan Binjai, 50450 Kuala Lumpur, Malaysia</p>
+                      <p className="text-xs text-slate-400 mt-1">40/D, Dilu Road, New Eskaton, Dhaka</p>
                     </div>
                   </li>
                   
@@ -205,7 +242,7 @@ export default function Contact() {
                     <div>
                       <p className="font-bold text-slate-100">Corporate Front-Desk</p>
                       <p className="text-xs text-slate-400 mt-1">
-                        <a href="tel:+60321811888" className="hover:text-[#2A8C9E] transition-colors font-medium">+60 3-2181 1888</a> (Operating Desk)
+                        <a href="tel:01670555719" className="hover:text-[#2A8C9E] transition-colors font-medium">01670555719</a> (Operating Desk)
                       </p>
                     </div>
                   </li>
@@ -215,8 +252,7 @@ export default function Contact() {
                     <div>
                       <p className="font-bold text-slate-100">Direct Electronic Mails</p>
                       <p className="text-xs text-slate-400 mt-1">
-                        General Support: <a href="mailto:info@hasanahtech.com" className="hover:text-[#2A8C9E] font-medium text-slate-300 transition-colors">info@hasanahtech.com</a><br />
-                        Vendor Inquiries: <a href="mailto:partners@hasanahtech.com" className="hover:text-[#2A8C9E] font-medium text-slate-300 transition-colors">partners@hasanahtech.com</a>
+                        General Support: <a href="mailto:musabbinsharf321@gmail.com" className="hover:text-[#2A8C9E] font-medium text-slate-300 transition-colors">musabbinsharf321@gmail.com</a>
                       </p>
                     </div>
                   </li>
@@ -224,8 +260,8 @@ export default function Contact() {
                   <li className="flex items-start space-x-3.5">
                     <Clock className="w-5 h-5 text-[#E8B84B] shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-bold text-slate-100">Malaysian Standard Working Hours</p>
-                      <p className="text-xs text-slate-400 mt-1">Monday – Friday: 09:00 AM – 06:00 PM (UTC+8)<br />Saturdays / Sundays: Rest Days / Critical SLAs Support Open</p>
+                      <p className="font-bold text-slate-100">Bangladesh Standard Working Hours</p>
+                      <p className="text-xs text-slate-400 mt-1">Sunday – Thursday: 09:00 AM – 06:00 PM (UTC+6)<br />Fridays / Saturdays: Rest Days / Critical SLAs Support Open</p>
                     </div>
                   </li>
                 </ul>
@@ -236,7 +272,7 @@ export default function Contact() {
                     { icon: <Linkedin className="w-4 h-4" />, href: 'https://linkedin.com' },
                     { icon: <Github className="w-4 h-4" />, href: 'https://github.com' },
                     { icon: <Twitter className="w-4 h-4" />, href: 'https://twitter.com' },
-                    { icon: <Facebook className="w-4 h-4" />, href: 'https://facebook.com' }
+                    { icon: <Facebook className="w-4 h-4" />, href: 'https://www.facebook.com/share/18vQKwqA6c/' }
                   ].map((social, index) => (
                     <a
                       key={index}
@@ -282,9 +318,9 @@ export default function Contact() {
                 {/* Floating Map Info Overlay */}
                 <div className="absolute bg-[#0b1523] text-white p-3 rounded-xl border border-white/10 shadow-lg text-center max-w-[180px]">
                   <p className="font-display font-bold text-xs text-[#E8B84B]">Hasanah Tech Solutions</p>
-                  <p className="text-[9px] text-slate-300 mt-0.5">Menara Binjai, Level 28</p>
+                  <p className="text-[9px] text-slate-300 mt-0.5">Dilu Road, New Eskaton, Dhaka</p>
                   <a 
-                    href="https://google.com/maps" 
+                    href="https://www.google.com/maps/search/?api=1&query=40/D+Dilu+Road+New+Eskaton+Dhaka" 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="text-[9px] text-[#3AA6B5] hover:underline font-bold mt-1 block"
