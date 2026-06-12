@@ -20,6 +20,24 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: 'Hasanah Tech Solutions | Innovate | Empower | Transform',
   description: 'Premium custom software development, high-performance web applications, enterprise ERP solutions, mobile app development, and bespoke AI & cloud automation integrations.',
+  openGraph: {
+    title: 'Hasanah Tech Solutions',
+    description: 'Premium custom software development, high-performance web applications, enterprise ERP solutions, and mobile app development.',
+    images: [
+      {
+        url: '/images/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Hasanah Tech Solutions',
+      },
+    ],
+    type: 'website',
+  },
+  icons: {
+    icon: '/images/logo.png',
+    shortcut: '/images/logo.png',
+    apple: '/images/logo.png',
+  },
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
